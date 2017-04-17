@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Article;
 use Response;
+use Illuminate\Support\Facades\Validator;
+use Purifier;
 
 class ArticlesController extends Controller
 {
@@ -17,8 +19,24 @@ class ArticlesController extends Controller
   }
   //Stores Our Articles
   public function store(Request $request)
+  //store function
+  //validate and stores blog post
   {
+    $article = [//rules array
+      'title' => 'required',
+      'body' => 'reiquired',
+      'image' => 'required'
+    ];
+
+    $validator = Validator::make(Purifier::clean($request->all()), $rules);//pass in data
+
+    if($validator->fails())//check to see if validation has failed. if a return statement artivates then anything after will not activate. unless you choose to do an 'else if' statement
+    {
+      return Response::json(["error" => "Please fill out all fields."]);
+    }
+
     $article = new Article;
+
     $article->title = $request->input('title');
     $article->body = $request->input('body');
 
