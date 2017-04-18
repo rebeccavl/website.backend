@@ -14,7 +14,12 @@ class ArticlesController extends Controller
   public function index()
   {
     $articles = Article::orderBy("id","desc")->take(3)->get();
-
+    foreach($articles as $key => $article){
+      if(strlen($article->body) > 100)
+      {
+        $article->body = substr($article->body, 0, 100)."...";
+      }
+    }
     return Response::json($articles);
   }
   //Stores Our Articles
@@ -22,9 +27,9 @@ class ArticlesController extends Controller
   //store function
   //validate and stores blog post
   {
-    $article = [//rules array
+    $rules = [//rules array
       'title' => 'required',
-      'body' => 'reiquired',
+      'body' => 'required',
       'image' => 'required'
     ];
 
