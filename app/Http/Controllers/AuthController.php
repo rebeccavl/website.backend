@@ -31,7 +31,7 @@ class AuthController extends Controller
       {
         return Response::json(["error"=>"You've already been here."]);
       }
-      
+
       if(strlen($request->input("username"))>12)
       {
         return Response::json(["error"=>"Your username is too long."]);
@@ -39,18 +39,19 @@ class AuthController extends Controller
 
       if(strlen($request->input("email"))>32)
       {
-        return Response::json(["error"=>"Your email is too long. "])
+        return Response::json(["error"=>"Your email is too long. "]);
       }
 
-      if(strlen($request->input("password"=>))<8)
+      if(strlen($request->input("password"))<8)
       {
-        return Response::json(["error"=>"Your password must be at least 8 characters"])
+        return Response::json(["error"=>"Your password must be at least 8 characters"]);
       }
 
       $user = new User;
       $user->name = $request->input("username");
       $user->email = $request->input("email");
       $user->password= Hash::make($request->input("password"));
+      $user->roleID= 2;
       $user->save();
 
       return Response::json(["success"=>"You did it!"]);
