@@ -16,25 +16,25 @@ class CommentsController extends Controller
 {
   public function __construct()//aka a constructor but in php form.this ensures that only logged in users may comment.
   {
-    $this->middleware('jwth.auth',['only'=>['store']]);
+    $this->middleware('jwt.auth',['only'=>['store']]);//
   }
     public function index($id)
     {
       $comments = Comment::where('comments.articleID','=',$id)
         ->join('users','comments.userID','=','users.id')
         ->select('comments.id', 'comments.created_at','comments.body','users.name')
-        ->orderBy('id','desc')
+        ->orderBy('comments.id','desc')
         ->get();
 
-        foreach ($comments as $key => $comment)
+        foreach ($comments as $key => $comment)//looping over comments table. aka foreach loop
         {
-          $comment->commentDate = Carbon::createFromTimeStamp(strtotime($comment->created_at))->diffForHumans();
+         $comment->commentDate = Carbon::createFromTimeStamp(strtotime($comment->created_at))->diffForHumans();//foreach comment we will add a date and in a certain Carbon format
         }
-      return Response::json($comments);
+      return Response::json($comments);//this will load the comments to the front end
     }
 
     public function store(Request $request)
-    {
+  {
       $rules = [//corresponds with the storeComment in the comments index.js
         'body' => 'required',
         'articleID' => 'required'
@@ -57,7 +57,7 @@ class CommentsController extends Controller
     $comment = new Comment;//references the storeComment in the Single index.js
     $comment->userID = $user->id;//references the ''$user' above.requesting the user id from the frontend
     $comment->articleID = $request->input('articleID');
-    $comment->body = $request->body('body');
+    $comment->body = $request->input('body');
     $comment->save();//make sure to include save at the end
 
     return Response::json(['success'=> 'Your comment has been added.']);

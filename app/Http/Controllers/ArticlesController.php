@@ -87,7 +87,7 @@ class ArticlesController extends Controller
     $image->move("storage/",$imageName);
     $article->image = $request->root(). "/storage/".$imageName;
 
-    //Comits the saves to the DB
+    //Commits the saves to the DB
     $article->save();
 
     return Response::json(["success"=>"Article Updated."]);
