@@ -25,3 +25,4 @@ Route::post('SignUp','AuthController@SignUp');
 Route::get('getComments/{id}', 'CommentsController@index');
 Route::post('storeComment','CommentsController@store');
 Route::post('deleteComment/{id}','CommentsController@destroy');
+Route::any('{path?}','AuthController@index')->where('path','.+');
